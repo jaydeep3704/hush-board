@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials: any, req): Promise<any> {
                 await connectDB()
+                
                 try {
 
 
