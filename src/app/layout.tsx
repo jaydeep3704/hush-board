@@ -1,9 +1,10 @@
+
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono,Manrope } from "next/font/google";
-
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
-
 const manrope=Manrope({
   variable:"--font-manrope",
   subsets:["latin"],
@@ -33,10 +34,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
+        
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
       >
         {children}
+        <Toaster/>
       </body>
       </AuthProvider>
     </html>
