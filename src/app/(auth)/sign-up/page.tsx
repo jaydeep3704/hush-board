@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useDebounceValue } from "usehooks-ts"
+import { useDebounceCallback } from "usehooks-ts"
 import { useEffect, useState } from "react";
 import { signupSchema } from "@/schemas/signupSchema";
 import axios, { AxiosError } from "axios"
@@ -13,7 +13,8 @@ import { ApiResponse } from "@/types/apiResponse";
 import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight, ArrowRightFromLine, ArrowRightIcon, Loader2 } from "lucide-react";
 
 export default function Page() {
     const [username, setUsername] = useState('')
@@ -33,7 +34,7 @@ export default function Page() {
 
 
     const { toast } = useToast()
-    const debouncedUsername = useDebounceValue(username, 300)
+    const debounced = useDebounceCallback(setUsername, 300)
     const router = useRouter()
     const onSubmit = async (data: z.infer<typeof signupSchema>) => {
         setIsSubmitting(true)
@@ -71,19 +72,24 @@ export default function Page() {
     useEffect(() => {
 
         const checkUsernameUnique = async () => {
-            if (debouncedUsername) {
+            if (username){
                 setIsCheckingUsername(true)
                 setUsernameMessage('')
                 try {
-                    const res = await axios.get(`/api/check-username-valid?username=${debouncedUsername}`)
+                    const res = await axios.get(`/api/check-username-valid?username=${username}`)
                     setUsernameMessage(res.data.message)
+                    if(res.data.success){
+                        toast({
+                            title:res.data.message
+                        })
+                    }
                 } catch (error) {
                     const axiosError = error as AxiosError<ApiResponse>
                     setUsernameMessage(axiosError.response?.data.message ?? "Error Checking username")
                     toast({
                         title: 'username check failed',
                         description: axiosError.response?.data.message,
-                        variant: "destructive"
+                        variant:'default'
                     })
                 }
                 finally {
@@ -94,62 +100,88 @@ export default function Page() {
 
         checkUsernameUnique()
 
-    }, [])
+    }, [username])
 
     return (
-        <section className="h-screen w-full flex justify-center items-center font-manrope bg-gradient-to-b from-white to-amber-200">
-            <div className="md:w-1/4 w-[80%] flex flex-col gap-5 px-5 py-10 rounded-xl shadow-neubrutalism border-2 border-black bg-white">
-                <div className="font-bold text-xl text-center">Sign Up</div>
+
+        <section className="min-h-screen w-full flex justify-center items-center dark:bg-black ">
+            <div className="max-w-md w-full my-5 mx-auto  rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black
+             border-[0.5px] dark:border-neutral-800
+            ">
+
+                <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 text-center mt-5">
+                    Welcome to HushBoard
+                </h2>
+
                 <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5" >
-                    <FormField   
-                        control={form.control}
-                        name="username"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Username</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="username" {...field} onChange={(e)=>{
-                                        field.onChange(e)
-                                        setUsername(e.target.value)
-                                    }}/>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField   
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="email" {...field} type="email" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField   
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="password" {...field} type="password" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button className="mt-5">Sign Up</Button>
-                </form>
-            </Form>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 my-8 " >
+                        <FormField
+                            control={form.control}
+                            name="username"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="">Username</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="username" {...field} onChange={(e) => {
+                                            field.onChange(e)
+                                            debounced(e.target.value)
+                                        }} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="email" {...field} type="email" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="password" {...field} type="password" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <button
+                            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 flex dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] mt-4 items-center justify-center"
+                            type="submit"
+                        >
+                           {isSubmitting?<Loader2 className="animate-spin"/>:<div className="flex gap-3 items-center">Sign Up <ArrowRightIcon className="h-[18px] w-6"/> </div>} 
+                            <BottomGradient />
+                        </button>
+                        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-5 h-[1px] w-full" />
+
+                        <p className=" text-sm text-neutral-800 dark:text-neutral-500 text-center mt-3">
+                        Already have an account ? <Link href={"/sign-in"} className="hover:text-white">Sign In</Link>
+                        </p>
+                    </form>
+                </Form>
             </div>
-           
         </section>
     )
 
 }
+
+const BottomGradient = () => {
+    return (
+        <>
+            <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+            <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+        </>
+    );
+};

@@ -7,7 +7,7 @@ export async function POST(request:NextRequest){
     try 
     {
         const requestBody=await request.json()
-        const {OTP,username}=requestBody
+        const {verifyCode,username}=requestBody
         const user=await UserModel.findOne({username})
 
         if(!user){
@@ -19,7 +19,7 @@ export async function POST(request:NextRequest){
         }
 
 
-        const isOTPValid= OTP===user.verifyCode
+        const isOTPValid= verifyCode===user.verifyCode
         const isVerifyCodeExpired= new Date() > user.verifyCodeExpiry
 
         if(isOTPValid && !isVerifyCodeExpired)

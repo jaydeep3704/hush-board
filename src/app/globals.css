@@ -6,13 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@layer utilities{
-  .feature-card{
-    @apply p-5  border-2 border-black md:w-[40%] rounded-md w-full hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all 
-  }
-
-  
-}
 
 @layer base {
   :root {
@@ -70,11 +63,3 @@ body {
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
