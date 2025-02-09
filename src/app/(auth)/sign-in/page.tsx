@@ -58,7 +58,7 @@ export default function Page() {
 
     return (
 
-        <section className="min-h-screen w-full flex justify-center items-center dark bg-black ">
+        <section className="min-h-screen w-full flex justify-center items-center  dark:bg-black ">
             <div className="max-w-md w-full mx-auto  rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black
              border-[0.5px] dark:border-neutral-700
             ">
