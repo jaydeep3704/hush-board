@@ -4,21 +4,19 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useDebounceValue } from "usehooks-ts"
-import { useEffect, useState } from "react";
-import { signupSchema } from "@/schemas/signupSchema";
-import axios, { AxiosError } from "axios"
+import {  useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiResponse } from "@/types/apiResponse";
 import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { signInSchema } from "@/schemas/signinSchema";
+import { ArrowRightIcon, Loader2 } from "lucide-react";
 
 
 export default function Page() {
-
+    
+    const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const form = useForm<z.infer<typeof signInSchema>>({
@@ -33,13 +31,14 @@ export default function Page() {
 
     const { toast } = useToast()
     
-    const router = useRouter()
     const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    setIsSubmitting(true)
        const result=await signIn('credentials',{
         redirect:false,
         identifier:data.identifier,
         password:data.password
        })
+       console.log(result,data)
        if(result?.error){
         toast({
             title:"Login Failed",
@@ -47,9 +46,11 @@ export default function Page() {
         })
        }
        
-       if(result?.url){
-        router.replace('/dashboard')
-       }
+       if (result?.url) {
+        router.replace('/dashboard');
+      }
+       
+       setIsSubmitting(false)
     }
 
 
@@ -96,10 +97,10 @@ export default function Page() {
                             )}
                         />
                         <button
-                            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] mt-4"
+                            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 flex dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] mt-4 items-center justify-center"
                             type="submit"
                         >
-                            Sign In &rarr;
+                           {isSubmitting?<Loader2 className="animate-spin"/>:<div className="flex gap-3 items-center">Sign In <ArrowRightIcon className="h-[18px] w-6"/> </div>} 
                             <BottomGradient />
                         </button>
                         <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-5 h-[1px] w-full" />

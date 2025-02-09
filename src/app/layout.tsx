@@ -1,14 +1,16 @@
 
 
 import type { Metadata } from "next";
-import { Geist, Geist_Mono,Manrope } from "next/font/google";
+import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
-const manrope=Manrope({
-  variable:"--font-manrope",
-  subsets:["latin"],
-  weight:"400",
+import { ThemeProvider } from "@/components/theme-provider"
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  weight: "400",
 })
 
 const geistSans = Geist({
@@ -32,15 +34,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" >
       <AuthProvider>
-        
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
-      >
-        {children}
-        <Toaster/>
-      </body>
+        <body    className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}>
+        <ThemeProvider 
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+
+            {children}
+          </ThemeProvider>
+            <Toaster />
+          </body>
       </AuthProvider>
     </html>
   );
