@@ -13,9 +13,10 @@ module.exports = {
     // rest of the code
     extend: {
       colors: {
-        'saas-foreground':'#24263b',
-        'saas-background':'#14142b',
-        'text-1':'#a0e548',
+        'saas-foreground':'#1C1917',
+        'saas-background':'#09090B',
+        'neon-green':'#22C55E',
+        'neon-orange':'#E03E3B'
         
       },
 

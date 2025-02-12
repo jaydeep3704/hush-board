@@ -6,7 +6,6 @@ import MessageCard from '@/components/MessageCard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { acceptMessageSchema } from '@/schemas/acceptMessageSchema';
-import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Message } from '@/app/models/user.model';
 import axios, { AxiosError } from 'axios';
@@ -14,8 +13,9 @@ import { ApiResponse } from '@/types/apiResponse';
 import { toast } from '@/hooks/use-toast';
 import { User } from 'next-auth';
 import { Copy, Loader2, RefreshCcw } from 'lucide-react';
-import { Separator } from '@radix-ui/react-dropdown-menu';
+
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 const page = () => {
 
@@ -122,17 +122,17 @@ const page = () => {
 
 
   return (
-    <section className='px-[4%] py-10 h-[calc(100vh-80px)] dark:bg-saas-background'>
-      <h1 className=" text-4xl dark:text-text-1">
+    <section className='px-[8%] py-10 dark:bg-saas-background h-[calc(100vh-80px)] '>
+      <h1 className=" text-4xl dark:text-neon-green">
         User Dashboard.
       </h1>
 
-      <div className='md:w-[60%] w-full'>
-        <div className='mt-5  rounded-full overflow-hidden flex items-center py-2 border dark:bg-saas-foreground  px-4 border-black'>
+      <div className=' w-full mt-5'>
+        <div className='text-lg font-semibold'>Copy your unique link</div>
+        <div className='mt-3  rounded-full overflow-hidden flex items-center py-2 border dark:bg-saas-foreground bg-[#FAFAFA] px-4 dark:border-none'>
           <input type="text" className='w-full py-2 bg-transparent outline-none' disabled value={profileURL} />
           <Copy className='cursor-pointer' onClick={copyToClipboard} />
         </div>
-        <p className='text-sm mt-4 font-semibold text-text-2'>Share this URL with others to gather their feedback.</p>
       </div>
 
       <div className="my-5">
@@ -142,14 +142,29 @@ const page = () => {
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
-        <span className="ml-2">
+        <span className="ml-2 text-primary">
           Accept Messages: {acceptMessages ? 'On' : 'Off'}
         </span>
       </div>
-      <Separator />
 
-      <div >
-        <MessageCard/>
+      <Separator className='dark:bg-neutral-800 bg-neutral-300'/>
+
+      <div className='mt-10'>
+        <Button className='dark:bg-neon-green'><RefreshCcw/></Button>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <MessageCard
+              key={message._id}
+              message={message}
+              onMessageDelete={handleDeleteMessage}
+            />
+          ))
+        ) : (
+          <p>No messages to display.</p>
+        )}
+      </div>
+       
       </div>
 
       

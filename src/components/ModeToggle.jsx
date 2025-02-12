@@ -18,9 +18,9 @@ export default function ModeToggle() {
   return (
     <div className="flex gap-3">
       {theme === "dark" ? (
-        <SunIcon onClick={() => setTheme("light")} className="w-4 h-5 cursor-pointer text-white" />
+        <SunIcon onClick={() => setTheme("light")} className="w-4 h-5 cursor-pointer " />
       ) : (
-        <MoonIcon onClick={() => setTheme("dark")} className="w-4 h-5 cursor-pointer text-white" />
+        <MoonIcon onClick={() => setTheme("dark")} className="w-4 h-5 cursor-pointer " />
       )}
     </div>
   );

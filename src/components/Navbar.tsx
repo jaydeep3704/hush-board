@@ -20,13 +20,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-saas-background flex w-full h-[80px] items-center  justify-between px-[4%] border-b-[0.5px] dark:border-neutral-800 ">
-      <h2 className="text-xl text-text-1 font-semibold">HushBoard.</h2>
+    <nav className="flex w-full h-[80px] items-center  justify-between px-[8%] border-b-[0.5px] dark:border-neutral-800 bg-background  dark:bg-saas-background bg-[#101524] text-white">
+      <h2 className="text-xl  font-semibold dark:text-neon-green">HushBoard.</h2>
 
       {/* ✅ Fix: Don't render session UI until it's loaded */}
       {status === "loading" ? null : session ? (
-        <div className="md:block hidden text-white">
-          Welcome, <span className="text-md font-semibold text-text-1">
+        <div className="md:block hidden">
+          Welcome, <span className="text-md font-semibold dark:text-neon-green">
             {user?.username || user?.email}
           </span>
         </div>
@@ -36,7 +36,7 @@ const Navbar = () => {
         {status === "loading" ? null : status !== "authenticated" ? (
           <Link href={"/sign-in"}>Login</Link>
         ) : (
-          <Button onClick={handleLogout} className="shadow-none text-md text-white">
+          <Button onClick={handleLogout} className="shadow-none text-md  dark:bg-neon-green bg-white text-black dark:text-white" >
             Logout
           </Button>
         )}
