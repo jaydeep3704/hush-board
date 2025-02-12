@@ -13,21 +13,10 @@ module.exports = {
     // rest of the code
     extend: {
       colors: {
-        'woodsmoke': {
-          '50': '#f6f5f5',
-          '100': '#e7e6e6',
-          '200': '#d2cfcf',
-          '300': '#b2aeaf',
-          '400': '#8b8586',
-          '500': '#706a6b',
-          '600': '#5f5b5b',
-          '700': '#514d4d',
-          '800': '#464445',
-          '900': '#3e3b3b',
-          '950': '#171616',
-        },
-
-
+        'saas-foreground':'#24263b',
+        'saas-background':'#14142b',
+        'text-1':'#a0e548',
+        
       },
 
       boxShadow: {

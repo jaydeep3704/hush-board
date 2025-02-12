@@ -42,6 +42,7 @@ export async function GET(request: NextRequest) {
         const userId = user._id
 
         const foundUser = await UserModel.findById(userId)
+        
         if (!foundUser) {
             return NextResponse.json({ success: false, message: "User Not found" }, { status: 404 })
         }
