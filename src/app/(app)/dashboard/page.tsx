@@ -102,9 +102,9 @@ const page = () => {
     if (!session || !session.user) {
       return;
     }
-    fetchMessages();
+    fetchMessages()
     fetchAcceptMessage()
-  }, [session, setValue, fetchAcceptMessage, fetchMessages])
+  }, [session, setValue])
 
   if (!session || !session.user) {
     return <div></div>
@@ -120,9 +120,11 @@ const page = () => {
     toast({ title: 'URL Copied', description: 'profile url has been copied to clipboard' })
   }
 
+  
+
 
   return (
-    <section className='px-[8%] py-10 dark:bg-saas-background h-[calc(100vh-80px)] '>
+    <section className='px-[8%] py-10 dark:bg-saas-background min-h-[calc(100vh-80px)] '>
       <h1 className=" text-4xl dark:text-neon-green">
         User Dashboard.
       </h1>
@@ -149,17 +151,17 @@ const page = () => {
 
       <Separator className='dark:bg-neutral-800 bg-neutral-300'/>
 
-      <div className='mt-10'>
-        <Button className='dark:bg-neon-green'><RefreshCcw/></Button>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className='mt-10 w-full'>
+        <Button className='dark:bg-neon-green' onClick={()=>fetchMessages(true)}>{loading?<Loader2 className='animate-spin'/>:<RefreshCcw/>}</Button>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         {messages.length > 0 ? (
-          messages.map((message, index) => (
-            <MessageCard
-              key={message._id}
+          messages.map((message, index) => {
+           return ( <MessageCard
+              key={message._id as string}
               message={message}
               onMessageDelete={handleDeleteMessage}
-            />
-          ))
+            />)
+            })
         ) : (
           <p>No messages to display.</p>
         )}

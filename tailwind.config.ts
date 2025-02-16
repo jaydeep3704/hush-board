@@ -16,8 +16,8 @@ module.exports = {
         'saas-foreground':'#1C1917',
         'saas-background':'#09090B',
         'neon-green':'#22C55E',
-        'neon-orange':'#E03E3B'
-        
+        'neon-orange':'#E03E3B',
+        'light-primary':'#101524'
       },
 
       boxShadow: {

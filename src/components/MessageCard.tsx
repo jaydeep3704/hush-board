@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import dayjs from 'dayjs';
 import {
@@ -28,7 +30,7 @@ import { ApiResponse } from '@/types/apiResponse'
 import axios, { AxiosError } from 'axios'
 type MessageCardProps = {
     message: Message,
-    onMessageDelete: (messageId: string) => void
+    onMessageDelete: (messageId: any) => void
 }
 
 
@@ -56,18 +58,18 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
         } 
       };
     return (
-        <Card className='w-full md:w-1/2 h-[150px] dark:bg-saas-foreground dark:border-none '>
+        <Card className='w-full h-[150px] dark:bg-saas-foreground dark:border-none '>
             <CardHeader >
                <div className='flex flex-row justify-between'>
               
-                <CardTitle className='text-lg md:text-2xl font-semibold'>What is your hobby ?</CardTitle>
-                <AlertDialog>
+                <CardTitle className='text-lg md:text-2xl font-semibold'>{message.content}</CardTitle>
+                <AlertDialog >
                     <AlertDialogTrigger className='dark:bg-neon-green py-1.5 px-3 rounded-md bg-neon-orange text-white'>
                         
-                        <X className='w-5 h-5'/>
+                        <X className='w-5 h-5' />
                         
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className='dark:bg-saas-foreground border-none bg-white'>
                         <AlertDialogHeader>
                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                             <AlertDialogDescription>
@@ -75,8 +77,8 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction>Continue</AlertDialogAction>
+                            <AlertDialogCancel className='dark:bg-red-600 border-none bg-neon-orange text-white'>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteConfirm} className='dark:bg-neon-green bg-light-primary text-white'>Confirm</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
